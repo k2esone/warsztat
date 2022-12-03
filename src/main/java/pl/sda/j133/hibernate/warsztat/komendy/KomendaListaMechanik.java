@@ -23,7 +23,7 @@ public class KomendaListaMechanik implements Komenda {
 
     @Override
     public void obsluga() {
-        List<Mechanik> pojazdy = dataAccessObject.findAll(Mechanik.class);
-        pojazdy.forEach(System.out::println);
+        List<Mechanik> mechanikowie = dataAccessObject.findAll(Mechanik.class);
+        mechanikowie.forEach(System.out::println);
     }
 }
