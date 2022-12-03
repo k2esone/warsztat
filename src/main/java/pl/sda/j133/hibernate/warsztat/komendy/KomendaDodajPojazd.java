@@ -3,11 +3,19 @@ package pl.sda.j133.hibernate.warsztat.komendy;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pl.sda.j133.hibernate.warsztat.HibernateUtil;
+import pl.sda.j133.hibernate.warsztat.model.DataAccessObject;
 import pl.sda.j133.hibernate.warsztat.model.Pojazd;
 
+import javax.xml.crypto.Data;
 import java.rmi.ServerError;
 
 public class KomendaDodajPojazd implements Komenda {
+    private DataAccessObject<Pojazd> dataAccessObject;
+
+    public KomendaDodajPojazd() {
+        this.dataAccessObject = new DataAccessObject<>();
+    }
+
     @Override
     public String getKomenda() {
         return "dodaj pojazd";
@@ -34,15 +42,6 @@ public class KomendaDodajPojazd implements Komenda {
                 .vin(vin)
                 .build();
 
-try(Session session = HibernateUtil.INSTANCE.getSessionFactory().openSession()) {
-    Transaction transaction = session.beginTransaction();
-
-    session.persist(pojazd);
-
-    transaction.commit();
-} catch (Exception e) {
-    System.err.println("Blad: " + e);
-}
-
+        dataAccessObject.insert(pojazd);
     }
 }

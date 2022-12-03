@@ -3,9 +3,16 @@ package pl.sda.j133.hibernate.warsztat.komendy;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pl.sda.j133.hibernate.warsztat.HibernateUtil;
+import pl.sda.j133.hibernate.warsztat.model.DataAccessObject;
 import pl.sda.j133.hibernate.warsztat.model.Mechanik;
 
 public class KomendaDodajMechanik implements Komenda {
+    private DataAccessObject<Mechanik> dataAccessObject;
+
+    public KomendaDodajMechanik() {
+        this.dataAccessObject = new DataAccessObject<>();
+    }
+
     @Override
     public String getKomenda() {
         return "dodaj mechanika";
@@ -28,15 +35,7 @@ public class KomendaDodajMechanik implements Komenda {
                 .specjalizacja(specjalizacja)
                 .build();
 
-        try (Session session = HibernateUtil.INSTANCE.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-
-            session.persist(mechanik);
-
-            transaction.commit();
-        } catch (Exception e) {
-            System.err.println("Blad: " + e);
-        }
+        dataAccessObject.insert(mechanik);
 
     }
 }
