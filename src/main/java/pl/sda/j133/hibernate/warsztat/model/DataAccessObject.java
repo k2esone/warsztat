@@ -45,4 +45,21 @@ public class DataAccessObject<T> {
         }
         return Optional.empty();
     }
+
+    public boolean delete(Class<T> tClass, Long id) {
+        try (Session session = HibernateUtil.INSTANCE.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            T encja = session.get(tClass, id);
+
+            if (encja == null) {
+                return false;
+            }
+            session.remove(encja);
+            transaction.commit();
+            return true;
+        } catch (Exception ioe) {
+            System.err.println("Blad bazy: " + ioe);
+        }
+        return false;
+    }
 }
